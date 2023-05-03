@@ -62,12 +62,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
 
-    # "accounts",
+    "accounts",
     "authentication",
     "events"
 ]
 
-# AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -112,122 +112,46 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-# Provider specific settings
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '481802958488-ktubea2a00p61qfk2r29plik2947nl3g.apps.googleusercontent.com',
-#             'secret': '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',
-#         },
-#         'AUTH_PARAMS': {
-#             'access_type': 'offline',
-#         },
-#         "SCOPE": [
-#             # minimum scopes
-#             'https://www.googleapis.com/auth/userinfo.profile',
-#             # additional scopes
-#             # "https://www.googleapis.com/auth/calendar.readonly",
-#         ],
-
-#     }
-# }
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'AUTH_PARAMS': {
-#             'access_type': 'offline',
-#         },
-#         "SCOPE": [
-#             # minimum scopes
-#             'https://www.googleapis.com/auth/userinfo.profile',
-#             # additional scopes
-#             "https://www.googleapis.com/auth/calendar.readonly",
-#         ],
-#         "REDIRECT_URI": "http://localhost:3000"
-
-#     }
-# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
-
-
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
 
 
-# REST_USE_JWT = True
-
-
 REST_AUTH = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.UserRegistrationSerializer',
+
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'access_token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
     'JWT_AUTH_HTTPONLY': True,
     'JWT_AUTH_SECURE': False,
+
+
 }
 
+
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    # "ROTATE_REFRESH_TOKENS": False,
-    # "BLACKLIST_AFTER_ROTATION": True,
-    # "UPDATE_LAST_LOGIN": False,
-
-    # "ALGORITHM": "HS256",
-    # "SIGNING_KEY": SECRET_KEY,
-    # 'VERIFYING_KEY': None,
-    # 'AUDIENCE': None,
-    # 'ISSUER': None,
-    # 'JWK_URL': None,
-    # 'LEEWAY': 0,
-
-    # "AUTH_HEADER_TYPES": ("Bearer",),
-    # "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    # 'USER_ID_FIELD': 'id',
-    # "USER_ID_CLAIM": "user_id",
-
-    # "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    # "TOKEN_TYPE_CLAIM": "token_type",
-
-    # "JTI_CLAIM": "jti",
-
-    # "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    # "SLIDING_TOKEN_LIFETIME": timedelta(minutes=30),
-    # "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
-
     "AUTH_COOKIE_ACCESS": "access_token",
     "AUTH_COOKIE_REFRESH": "refresh_token",
     "AUTH_COOKIE_SECURE": False,
-    # "AUTH_COOKIE_HTTP_ONLY": True,
     "AUTH_COOKIE_PATH": "/",
     "AUTH_COOKIE_SAMESITE": "Lax",
     "AUTH_COOKIE_DOMAIN": "*",
 }
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
-# REST_AUTH = {
-#     'USE_JWT': True,
-#     'JWT_AUTH_COOKIE': 'access_token',
-#     'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
-# }
-
-
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
