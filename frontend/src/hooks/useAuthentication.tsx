@@ -8,6 +8,7 @@ import {
 import {
   useGoogleLoginMutation,
   useLoginMutation,
+  useLogoutMutation,
   useTokenVerifyMutation,
 } from "../services";
 import { Credentials, GoogleCredentials } from "../types";
@@ -23,6 +24,9 @@ interface AuthenticationReturnType {
   googleLogin: (credentials: GoogleCredentials) => void;
   isGoogleLoginLoading: boolean;
   isGoogleLoginSuccess: boolean;
+  logout: (variables: unknown) => void;
+  isLogoutLoading: boolean;
+  isLogoutSuccess: boolean;
 }
 
 const AuthenticationContext = createContext<any>(null);
@@ -44,6 +48,11 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
     isLoading: isGoogleLoginLoading,
     isSuccess: isGoogleLoginSuccess,
   } = useGoogleLoginMutation();
+  const {
+    mutate: logout,
+    isLoading: isLogoutLoading,
+    isSuccess: isLogoutSuccess,
+  } = useLogoutMutation();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -63,6 +72,8 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
     // eslint-disable-next-line
   }, [isGoogleLoginSuccess]);
 
+  console.log("LOADOUT LOADING ", isLogoutLoading);
+
   return {
     isAuthenticated,
     isLoginLoading,
@@ -73,6 +84,9 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
     googleLogin,
     isGoogleLoginLoading,
     isGoogleLoginSuccess,
+    logout,
+    isLogoutLoading,
+    isLogoutSuccess,
   };
 };
 

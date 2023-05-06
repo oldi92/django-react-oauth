@@ -2,42 +2,65 @@ import {
   AppBar,
   Box,
   Container,
+  Divider,
   IconButton,
+  Menu,
+  MenuItem,
+  Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
+import { useState } from "react";
+import { useAuthentication } from "../../hooks";
 
 export const TopNavigation = () => {
+  const { logout, isLogoutLoading } = useAuthentication();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box>
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-          </Box>
+          <Stack
+            flex={1}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h6">Calendar</Typography>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <IconButton>
-              <AccountCircle />
-            </IconButton>
-          </Box>
+            <Box sx={{ flexGrow: 0 }}>
+              <IconButton onClick={handleClick}>
+                <AccountCircle />
+              </IconButton>
+
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <Typography sx={{ p: "6px 16px" }}>Hello, Oldi</Typography>
+                <Divider sx={{ m: "8px 0" }} />
+                <MenuItem onClick={logout} disabled={isLogoutLoading}>
+                  {isLogoutLoading ? "Loading..." : "Logout"}
+                </MenuItem>
+              </Menu>
+            </Box>
+          </Stack>
         </Toolbar>
       </Container>
     </AppBar>
