@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useLoginMutation } from "../services";
+import { useLoginMutation, useTokenVerifyMutation } from "../services";
 import { Credentials } from "../types";
 import { AxiosError } from "axios";
 
@@ -14,17 +14,24 @@ interface AuthenticationReturnType {
   isLoginLoading: boolean;
   loginError: AxiosError<any>;
   login: (credentials: Credentials) => void;
+  isTokenVerifyLoading: boolean;
+  isTokenVerifySuccess: boolean;
 }
 
 const AuthenticationContext = createContext<any>(null);
 
 const useAuthenticationProvider = (): AuthenticationReturnType => {
   const {
-    mutate,
+    mutate: login,
     isLoading: isLoginLoading,
     isSuccess: isLoginSuccess,
     error: loginError,
   } = useLoginMutation();
+  const {
+    mutate: tokenVerify,
+    isLoading: isTokenVerifyLoading,
+    isSuccess: isTokenVerifySuccess,
+  } = useTokenVerifyMutation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -34,14 +41,31 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
   }, [isLoginSuccess]);
 
   const handleLogin = (credentials: Credentials) => {
-    mutate(credentials);
+    login(credentials);
   };
+
+  const handleTokenVerify = () => {
+    tokenVerify(undefined);
+  };
+
+  useEffect(() => {
+    handleTokenVerify();
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (isTokenVerifySuccess) {
+      setIsAuthenticated(true);
+    }
+  }, [isTokenVerifySuccess]);
 
   return {
     isAuthenticated,
     isLoginLoading,
     loginError,
     login: handleLogin,
+    isTokenVerifyLoading,
+    isTokenVerifySuccess,
   };
 };
 

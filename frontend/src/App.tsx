@@ -2,6 +2,7 @@ import Login from "./Login";
 import { Events } from "./components";
 import styled from "@emotion/styled";
 import { useAuthentication } from "./hooks";
+import { CircularProgress, Stack } from "@mui/material";
 
 const Container = styled.div`
   height: 100vh;
@@ -12,15 +13,22 @@ const Container = styled.div`
 `;
 
 const App = () => {
-  const { isAuthenticated } = useAuthentication();
-
-  console.log("IS AUTH IN APP ", isAuthenticated);
+  const { isAuthenticated, isTokenVerifyLoading, isTokenVerifySuccess } =
+    useAuthentication();
 
   return (
     <Container>
-      {/* {isAuthenticatedLoading && <CircularProgress />} */}
+      {isTokenVerifyLoading && (
+        <Stack justifyContent="center">
+          <CircularProgress />
+        </Stack>
+      )}
 
-      {isAuthenticated ? <Events /> : <Login />}
+      {isAuthenticated && isTokenVerifySuccess && <Events />}
+
+      {!isAuthenticated && !isTokenVerifySuccess && !isTokenVerifyLoading && (
+        <Login />
+      )}
     </Container>
   );
 };

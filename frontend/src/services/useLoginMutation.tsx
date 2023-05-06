@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import { UseMutationResult, useMutation } from "react-query";
 import { Credentials } from "../types";
 
+axios.defaults.withCredentials = true;
+
 const login = (credentials: Credentials) => {
   return axios.post(
     "http://localhost:8000/authentication/dj-rest-auth/login/",
