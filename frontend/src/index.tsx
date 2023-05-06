@@ -4,14 +4,10 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-
-const CLIENT_ID =
-  "481802958488-49fhrkir8j0jri6940p4gjjd081dcl85.apps.googleusercontent.com";
 
 const darkTheme = createTheme({
   palette: {
@@ -22,13 +18,7 @@ const darkTheme = createTheme({
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={darkTheme}>
-      <GoogleOAuthProvider
-        clientId={
-          "481802958488-49fhrkir8j0jri6940p4gjjd081dcl85.apps.googleusercontent.com"
-        }
-      >
-        <App />
-      </GoogleOAuthProvider>
+      <App />
     </ThemeProvider>
   </React.StrictMode>
 );

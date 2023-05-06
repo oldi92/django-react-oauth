@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Theme } from "@mui/material";
 
 import Users from "./Users";
 import Login from "./Login";
+import { Events } from "./components";
+import styled from "@emotion/styled";
+
+const Container = styled.div`
+  height: 100vh;
+  background: ${({ theme }: any) => theme.palette.background.default};
+  color: ${({ theme }: any) => theme.palette.text.primary};
+  display: flex;
+  justify-content: center;
+`;
 
 function App() {
   const [isAuthenticatedLoading, setIsAuthenticatedLoading] = useState(true);
@@ -19,21 +29,19 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        {isAuthenticatedLoading && <CircularProgress />}
+    <Container>
+      {isAuthenticatedLoading && <CircularProgress />}
 
-        {isAuthenticated ? (
-          <Users />
-        ) : (
-          <Login
-            onLoginSuccess={() => {
-              setIsAuthenticated(true);
-            }}
-          />
-        )}
-      </header>
-    </div>
+      {isAuthenticated ? (
+        <Events />
+      ) : (
+        <Login
+          onLoginSuccess={() => {
+            setIsAuthenticated(true);
+          }}
+        />
+      )}
+    </Container>
   );
 }
 

@@ -30,6 +30,31 @@ export class UserModuleRpc extends BaseRpc {
       }
     }
   }
+
+  public async logout(
+    userLoginRequest: any,
+    config: AxiosRequestConfig = {}
+  ): Promise<any> {
+    const url = `${this.baseUrl}/authentication/dj-rest-auth/logout/`;
+
+    if (config.headers == null) {
+      config.headers = {
+        "Content-Type": "application/json",
+      };
+    }
+
+    try {
+      const response = await axios.post<any>(url, userLoginRequest, config);
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        throw error.response.data;
+      } else {
+        throw Object.assign(new Error("Something went wrong"), { code: 402 });
+      }
+    }
+  }
 }
 
 export default UserModuleRpc;

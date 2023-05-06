@@ -6,6 +6,7 @@ import { CLIENT_ID, CLIENT_SECRET, DOMAIN } from "./config";
 import "./GoogleLogin.css";
 import { Button } from "@mui/material";
 import axios from "axios";
+import { ReactComponent as GoogleIcon } from "./assets/google-icon.svg";
 const clientId =
   "481802958488-49fhrkir8j0jri6940p4gjjd081dcl85.apps.googleusercontent.com";
 const SCOPES =
@@ -225,17 +226,8 @@ export const GoogleLogin = () => {
   }, [code, googleTrigger]);
 
   return (
-    <div className="container">
-      <div id="customBtn" className="btn login">
-        Login
-      </div>
-
-      <Button onClick={loginV2}>Login with google v2</Button>
-      {/* <a
-        href={`https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=481802958488-ktubea2a00p61qfk2r29plik2947nl3g.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A3000&scope=profile&response_type=code&state=eBeK5Z0f3E3J&service=lso&o2v=2&flowName=GeneralOAuthFlow`}
-      >
-        Login with google v2
-      </a> */}
-    </div>
+    <Button size="large" onClick={loginV2} startIcon={<GoogleIcon />}>
+      Continue with Google
+    </Button>
   );
 };
