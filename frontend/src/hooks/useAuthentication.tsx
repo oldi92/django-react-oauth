@@ -1,18 +1,47 @@
-import { FormEvent, ReactNode, createContext, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useLoginMutation } from "../services";
+import { Credentials } from "../types";
+import { AxiosError } from "axios";
 
 interface AuthenticationReturnType {
   isAuthenticated: boolean;
+  isLoginLoading: boolean;
+  loginError: AxiosError<any>;
+  login: (credentials: Credentials) => void;
 }
 
-const AuthenticationContext = createContext({
-  isAuthenticated: false,
-});
+const AuthenticationContext = createContext<any>(null);
 
 const useAuthenticationProvider = (): AuthenticationReturnType => {
+  const {
+    mutate,
+    isLoading: isLoginLoading,
+    isSuccess: isLoginSuccess,
+    error: loginError,
+  } = useLoginMutation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (isLoginSuccess) {
+      setIsAuthenticated(true);
+    }
+  }, [isLoginSuccess]);
+
+  const handleLogin = (credentials: Credentials) => {
+    mutate(credentials);
+  };
 
   return {
     isAuthenticated,
+    isLoginLoading,
+    loginError,
+    login: handleLogin,
   };
 };
 
@@ -31,7 +60,7 @@ export const AuthenticationProvider = ({ children }: Props) => {
 };
 
 export const useAuthentication = () => {
-  const context = useAuthenticationProvider();
+  const context = useContext(AuthenticationContext);
 
   if (!context)
     throw new Error(

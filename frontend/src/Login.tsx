@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import {
   Alert,
   AlertTitle,
@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import styled from "@emotion/styled";
 import { GoogleLogin } from "./GoogleLogin";
-import { userModuleRpc } from "./services";
+import { useAuthentication } from "./hooks";
+import { Credentials } from "./types";
 
 const Container = styled.div`
   width: 400px;
@@ -23,40 +24,22 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-interface Props {
-  onLoginSuccess: () => void;
-}
-
-const Login = ({ onLoginSuccess }: Props) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>({});
+const Login = () => {
+  const { login, isLoginLoading, loginError } = useAuthentication();
   const formFields = ["email", "password"];
 
-  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const { email, password } = event.currentTarget;
+    const credentials: Credentials = {
+      email: email.value,
+      password: password.value,
+    };
 
-    try {
-      setLoading(true);
-      setError("");
-
-      const body = {
-        email: email.value,
-        password: password.value,
-      };
-
-      await userModuleRpc.login(body);
-
-      onLoginSuccess();
-    } catch (error: any) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
+    login(credentials);
   };
 
-  const isServerError = (errorFields: any) => {
+  const isServerError = (errorFields: any = {}) => {
     return Object.keys(errorFields).some(
       (field) => !formFields.includes(field)
     );
@@ -64,39 +47,41 @@ const Login = ({ onLoginSuccess }: Props) => {
 
   return (
     <Container>
-      {isServerError(error) &&
-        Object.entries(([errorKey, errorValue]: any) => (
-          <Alert sx={{ width: 420, mb: 2 }} severity="error">
-            <AlertTitle>{errorKey}</AlertTitle>
-            {errorValue}
-          </Alert>
-        ))}
+      {isServerError(loginError?.response?.data) &&
+        Object.entries(loginError?.response?.data || {}).map(
+          ([errorKey, errorValue]: any) => (
+            <Alert sx={{ width: 420, mb: 2 }} severity="error">
+              <AlertTitle>{errorKey}</AlertTitle>
+              {errorValue}
+            </Alert>
+          )
+        )}
 
-      <Form onSubmit={handleLogin}>
+      <Form onSubmit={handleSubmit}>
         <TextField
           name="email"
           margin="dense"
           label="Email"
-          error={!!error.email}
-          helperText={error.email}
+          error={!!loginError?.response?.data.email}
+          helperText={loginError?.response?.data.email}
         />
 
         <TextField
           name="password"
           margin="dense"
           label="Password"
-          error={!!error.password}
-          helperText={error.password}
+          error={!!loginError?.response?.data.password}
+          helperText={loginError?.response?.data.password}
         />
 
         <Button
           size="large"
-          disabled={loading}
+          disabled={isLoginLoading}
           variant="contained"
           sx={{ mt: 4 }}
           type="submit"
         >
-          {loading ? "Login..." : "Login"}
+          {isLoginLoading ? "Login..." : "Login"}
         </Button>
       </Form>
 

@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
-import { CircularProgress, Theme } from "@mui/material";
-
-import Users from "./Users";
 import Login from "./Login";
 import { Events } from "./components";
 import styled from "@emotion/styled";
+import { useAuthentication } from "./hooks";
 
 const Container = styled.div`
   height: 100vh;
@@ -14,35 +11,18 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-function App() {
-  const [isAuthenticatedLoading, setIsAuthenticatedLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const App = () => {
+  const { isAuthenticated } = useAuthentication();
 
-  useEffect(() => {
-    setIsAuthenticatedLoading(true);
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setIsAuthenticatedLoading(false);
-  }, []);
+  console.log("IS AUTH IN APP ", isAuthenticated);
 
   return (
     <Container>
-      {isAuthenticatedLoading && <CircularProgress />}
+      {/* {isAuthenticatedLoading && <CircularProgress />} */}
 
-      {isAuthenticated ? (
-        <Events />
-      ) : (
-        <Login
-          onLoginSuccess={() => {
-            setIsAuthenticated(true);
-          }}
-        />
-      )}
+      {isAuthenticated ? <Events /> : <Login />}
     </Container>
   );
-}
+};
 
 export default App;
