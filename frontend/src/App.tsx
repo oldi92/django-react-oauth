@@ -13,12 +13,16 @@ const Container = styled.div`
 `;
 
 const App = () => {
-  const { isAuthenticated, isTokenVerifyLoading, isTokenVerifySuccess } =
-    useAuthentication();
+  const {
+    isAuthenticated,
+    isTokenVerifyLoading,
+    isTokenVerifySuccess,
+    isGoogleLoginLoading,
+  } = useAuthentication();
 
   return (
     <Container>
-      {isTokenVerifyLoading && (
+      {(isTokenVerifyLoading || isGoogleLoginLoading) && (
         <Stack justifyContent="center">
           <CircularProgress />
         </Stack>
@@ -26,9 +30,7 @@ const App = () => {
 
       {isAuthenticated && isTokenVerifySuccess && <Events />}
 
-      {!isAuthenticated && !isTokenVerifySuccess && !isTokenVerifyLoading && (
-        <Login />
-      )}
+      {!isAuthenticated && <Login />}
     </Container>
   );
 };

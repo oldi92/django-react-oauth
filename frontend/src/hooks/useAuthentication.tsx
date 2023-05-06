@@ -5,8 +5,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useLoginMutation, useTokenVerifyMutation } from "../services";
-import { Credentials } from "../types";
+import {
+  useGoogleLoginMutation,
+  useLoginMutation,
+  useTokenVerifyMutation,
+} from "../services";
+import { Credentials, GoogleCredentials } from "../types";
 import { AxiosError } from "axios";
 
 interface AuthenticationReturnType {
@@ -16,6 +20,9 @@ interface AuthenticationReturnType {
   login: (credentials: Credentials) => void;
   isTokenVerifyLoading: boolean;
   isTokenVerifySuccess: boolean;
+  googleLogin: (credentials: GoogleCredentials) => void;
+  isGoogleLoginLoading: boolean;
+  isGoogleLoginSuccess: boolean;
 }
 
 const AuthenticationContext = createContext<any>(null);
@@ -32,40 +39,40 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
     isLoading: isTokenVerifyLoading,
     isSuccess: isTokenVerifySuccess,
   } = useTokenVerifyMutation();
+  const {
+    mutate: googleLogin,
+    isLoading: isGoogleLoginLoading,
+    isSuccess: isGoogleLoginSuccess,
+  } = useGoogleLoginMutation();
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (isLoginSuccess) {
+    if (isLoginSuccess || isTokenVerifySuccess || isGoogleLoginSuccess) {
       setIsAuthenticated(true);
     }
-  }, [isLoginSuccess]);
-
-  const handleLogin = (credentials: Credentials) => {
-    login(credentials);
-  };
-
-  const handleTokenVerify = () => {
-    tokenVerify(undefined);
-  };
+  }, [isLoginSuccess, isTokenVerifySuccess, isGoogleLoginSuccess]);
 
   useEffect(() => {
-    handleTokenVerify();
+    tokenVerify(undefined);
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    if (isTokenVerifySuccess) {
-      setIsAuthenticated(true);
-    }
-  }, [isTokenVerifySuccess]);
+    if (isGoogleLoginSuccess) tokenVerify(undefined);
+    // eslint-disable-next-line
+  }, [isGoogleLoginSuccess]);
 
   return {
     isAuthenticated,
     isLoginLoading,
     loginError,
-    login: handleLogin,
+    login,
     isTokenVerifyLoading,
     isTokenVerifySuccess,
+    googleLogin,
+    isGoogleLoginLoading,
+    isGoogleLoginSuccess,
   };
 };
 
@@ -83,7 +90,7 @@ export const AuthenticationProvider = ({ children }: Props) => {
   );
 };
 
-export const useAuthentication = () => {
+export const useAuthentication = (): AuthenticationReturnType => {
   const context = useContext(AuthenticationContext);
 
   if (!context)
