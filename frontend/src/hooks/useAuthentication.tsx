@@ -60,7 +60,16 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
     if (isLoginSuccess || isTokenVerifySuccess || isGoogleLoginSuccess) {
       setIsAuthenticated(true);
     }
-  }, [isLoginSuccess, isTokenVerifySuccess, isGoogleLoginSuccess]);
+
+    if (isLogoutSuccess) {
+      setIsAuthenticated(false);
+    }
+  }, [
+    isLoginSuccess,
+    isTokenVerifySuccess,
+    isGoogleLoginSuccess,
+    isLogoutSuccess,
+  ]);
 
   useEffect(() => {
     tokenVerify(undefined);
@@ -71,8 +80,6 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
     if (isGoogleLoginSuccess) tokenVerify(undefined);
     // eslint-disable-next-line
   }, [isGoogleLoginSuccess]);
-
-  console.log("LOADOUT LOADING ", isLogoutLoading);
 
   return {
     isAuthenticated,

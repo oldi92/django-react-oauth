@@ -8,9 +8,9 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { GoogleLogin } from "./GoogleLogin";
-import { useAuthentication } from "./hooks";
-import { Credentials } from "./types";
+import { GoogleLogin } from "..";
+import { useAuthentication } from "../../hooks";
+import { Credentials } from "../../types";
 
 const Container = styled.div`
   width: 400px;
@@ -24,7 +24,7 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-const Login = () => {
+export const Login = () => {
   const { login, isLoginLoading, loginError } = useAuthentication();
   const formFields = ["email", "password"];
 
@@ -93,4 +93,3 @@ const Login = () => {
     </Container>
   );
 };
-export default Login;

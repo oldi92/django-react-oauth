@@ -1,5 +1,4 @@
-import Login from "./Login";
-import { Events } from "./components";
+import { Events, Login } from "./components";
 import styled from "@emotion/styled";
 import { useAuthentication } from "./hooks";
 import { CircularProgress, Stack } from "@mui/material";

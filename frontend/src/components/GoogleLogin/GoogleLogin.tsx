@@ -5,11 +5,10 @@ import {
   GOOGLE_REDIRECT_URI,
   GOOGLE_RESPONSE_TYPE,
   GOOGLE_OAUTH_ENDPOINT,
-} from "./config";
-import "./GoogleLogin.css";
+} from "../../config";
 import { Button } from "@mui/material";
-import { ReactComponent as GoogleIcon } from "./assets/google-icon.svg";
-import { useAuthentication } from "./hooks";
+import { ReactComponent as GoogleIcon } from "../../assets/google-icon.svg";
+import { useAuthentication } from "../../hooks";
 
 export const GoogleLogin = () => {
   const { googleLogin } = useAuthentication();
