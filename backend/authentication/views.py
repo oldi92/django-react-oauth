@@ -1,4 +1,4 @@
-from dj_rest_auth.registration.views import SocialLoginView
+from dj_rest_auth.registration.views import SocialLoginView, SocialConnectView
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client, OAuth2Error
 import jwt
@@ -15,6 +15,9 @@ class CustomGoogleOAuth2Adapter(GoogleOAuth2Adapter):
 
     def complete_login(self, request, app, token, response, **kwargs):
         try:
+            print('********** ')
+            print('LOGOIN ', response["id_token"])
+            print('********** ')
             identity_data = jwt.decode(
                 response["id_token"]['id_token'],
                 # Since the token was received by direct communication
@@ -39,6 +42,12 @@ class CustomGoogleOAuth2Adapter(GoogleOAuth2Adapter):
 
 
 class GoogleLogin(SocialLoginView):
+    adapter_class = CustomGoogleOAuth2Adapter
+    client_class = OAuth2Client
+    callback_url = 'http://localhost:3000'
+
+
+class GoogleConnect(SocialConnectView):
     adapter_class = CustomGoogleOAuth2Adapter
     client_class = OAuth2Client
     callback_url = 'http://localhost:3000'

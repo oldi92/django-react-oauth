@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import event
+from .views import Events, SocialCalendar
 
 urlpatterns = [
-    path('', event, name='event'),
+    path('', Events.as_view(), name='events'),
+    path('social-calendar/', SocialCalendar.as_view(), name='social_calendar'),
 ]

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { UseMutationResult, useMutation } from "react-query";
-import { Credentials } from "../types";
+import { Credentials, LoginResponse } from "../types";
 
 axios.defaults.withCredentials = true;
 
@@ -12,7 +12,7 @@ const login = (credentials: Credentials) => {
 };
 
 export const useLoginMutation = (): UseMutationResult<
-  AxiosResponse<any, any>,
+  AxiosResponse<LoginResponse, any>,
   any,
   Credentials
 > => {

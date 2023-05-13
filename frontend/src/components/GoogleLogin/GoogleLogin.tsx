@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import {
   GOOGLE_CLIENT_ID,
-  GOOGLE_SCOPES,
+  GOOGLE_PROFILE_SCOPE,
+  GOOGLE_CALENDAR_SCOPE,
   GOOGLE_REDIRECT_URI,
   GOOGLE_RESPONSE_TYPE,
   GOOGLE_OAUTH_ENDPOINT,
@@ -10,10 +11,25 @@ import { Button } from "@mui/material";
 import { ReactComponent as GoogleIcon } from "../../assets/google-icon.svg";
 import { useAuthentication } from "../../hooks";
 
-export const GoogleLogin = () => {
+interface Props {
+  variant?: "login" | "calendar";
+  redirectUri?: string;
+  onOauthSuccess?: (code: string) => void;
+}
+
+export const GoogleLogin = ({
+  variant = "login",
+  redirectUri = GOOGLE_REDIRECT_URI,
+  onOauthSuccess,
+}: Props) => {
   const { googleLogin } = useAuthentication();
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
+
+  const scopes =
+    variant === "login"
+      ? GOOGLE_PROFILE_SCOPE + GOOGLE_CALENDAR_SCOPE
+      : GOOGLE_CALENDAR_SCOPE;
 
   const handleGoogleOauth = () => {
     // Check out google oauth2 docs for more in depth
@@ -25,9 +41,9 @@ export const GoogleLogin = () => {
 
     var params = {
       client_id: GOOGLE_CLIENT_ID,
-      redirect_uri: GOOGLE_REDIRECT_URI,
+      redirect_uri: redirectUri,
       response_type: GOOGLE_RESPONSE_TYPE,
-      scope: GOOGLE_SCOPES,
+      scope: GOOGLE_PROFILE_SCOPE + GOOGLE_CALENDAR_SCOPE,
     };
 
     for (var p in params) {
@@ -44,13 +60,23 @@ export const GoogleLogin = () => {
   };
 
   useEffect(() => {
-    if (code) googleLogin({ code });
+    if (code) {
+      if (onOauthSuccess) {
+        onOauthSuccess(code);
+      } else {
+        googleLogin({ code });
+      }
+    }
     // eslint-disable-next-line
   }, [code]);
 
-  return (
+  return variant === "login" ? (
     <Button size="large" onClick={handleGoogleOauth} startIcon={<GoogleIcon />}>
       Continue with Google
+    </Button>
+  ) : (
+    <Button fullWidth variant="contained" onClick={handleGoogleOauth}>
+      Connect
     </Button>
   );
 };

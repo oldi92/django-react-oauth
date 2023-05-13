@@ -78,6 +78,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    "authentication.middleware.MoveJWTCookieIntoTheBody"
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -117,22 +119,16 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
 }
 
 
 REST_AUTH = {
     'REGISTER_SERIALIZER': 'accounts.serializers.UserRegistrationSerializer',
-
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'access_token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
     'JWT_AUTH_HTTPONLY': True,
     'JWT_AUTH_SECURE': False,
-
-
 }
 
 

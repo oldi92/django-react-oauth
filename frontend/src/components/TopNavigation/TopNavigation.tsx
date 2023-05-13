@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useAuthentication } from "../../hooks";
 
 export const TopNavigation = () => {
-  const { logout, isLogoutLoading } = useAuthentication();
+  const { user, logout, isLogoutLoading } = useAuthentication();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -53,7 +53,9 @@ export const TopNavigation = () => {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <Typography sx={{ p: "6px 16px" }}>Hello, Oldi</Typography>
+                <Typography sx={{ p: "6px 16px" }}>
+                  Hello, {user.email}
+                </Typography>
                 <Divider sx={{ m: "8px 0" }} />
                 <MenuItem onClick={logout} disabled={isLogoutLoading}>
                   {isLogoutLoading ? "Loading..." : "Logout"}
