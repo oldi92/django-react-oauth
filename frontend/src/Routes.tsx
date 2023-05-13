@@ -6,7 +6,7 @@ import {
   Route,
   Routes as BrowseRoutes,
 } from "react-router-dom";
-import { Events, Login } from "./components";
+import { Dashboard, Login } from "./components";
 
 const Routes = () => {
   return (
@@ -14,7 +14,7 @@ const Routes = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <BrowseRoutes>
           <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Events />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </BrowseRoutes>
       </Suspense>
     </Router>

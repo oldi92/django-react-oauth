@@ -6,3 +6,5 @@ export * from "./useEventsQuery";
 export * from "./useGoogleConnectMutation";
 export * from "./useSocialAccountsQuery";
 export * from "./useSocialAccountDisconnectMutation";
+export * from "./useGoogleCalendar";
+export * from "./useDeleteGoogleCalendar";

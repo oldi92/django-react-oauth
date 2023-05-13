@@ -4,7 +4,7 @@ from django.conf import settings
 
 class GoogleCalendar(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE, unique=True)
     access_token = models.TextField(
         blank=True,
         verbose_name="Access token",
