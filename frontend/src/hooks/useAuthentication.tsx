@@ -73,6 +73,14 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
   });
 
   useEffect(() => {
+    if (isLoginSuccess) {
+      setIsAuthenticated(true);
+      tokenVerify(undefined);
+    }
+    // eslint-disable-next-line
+  }, [isLoginSuccess]);
+
+  useEffect(() => {
     if (isLoginSuccess || isTokenVerifySuccess || isGoogleLoginSuccess) {
       setIsAuthenticated(true);
     }
@@ -106,7 +114,10 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
   }, []);
 
   useEffect(() => {
-    if (isGoogleLoginSuccess) tokenVerify(undefined);
+    if (isGoogleLoginSuccess) {
+      setIsAuthenticated(true);
+      tokenVerify(undefined);
+    }
     // eslint-disable-next-line
   }, [isGoogleLoginSuccess]);
 

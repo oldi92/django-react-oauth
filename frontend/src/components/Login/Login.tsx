@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FormEvent, useEffect } from "react";
 import {
   Alert,
   AlertTitle,
@@ -11,6 +11,7 @@ import styled from "@emotion/styled";
 import { GoogleLogin } from "..";
 import { useAuthentication } from "../../hooks";
 import { Credentials } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 400px;
@@ -25,8 +26,19 @@ const Form = styled.form`
 `;
 
 export const Login = () => {
-  const { login, isLoginLoading, loginError } = useAuthentication();
+  const {
+    login,
+    isLoginLoading,
+    loginError,
+    isAuthenticated,
+    isTokenVerifySuccess,
+  } = useAuthentication();
+  const navigate = useNavigate();
   const formFields = ["email", "password"];
+
+  useEffect(() => {
+    if (isAuthenticated && isTokenVerifySuccess) navigate("/dashboard");
+  }, [navigate, isAuthenticated, isTokenVerifySuccess]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
