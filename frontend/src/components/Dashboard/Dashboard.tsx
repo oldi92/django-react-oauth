@@ -85,7 +85,10 @@ export const Dashboard = () => {
 
   const handleDeleteGoogleCalendar = (googleCalendarId: number) => {
     deleteGoogleCalendar(googleCalendarId, {
-      onSuccess: () => googleCalendarRefetch(),
+      onSuccess: () => {
+        googleCalendarRefetch();
+        refetch();
+      },
     });
   };
 
@@ -186,7 +189,7 @@ export const Dashboard = () => {
       </Stack>
 
       <Container>
-        {!googleCalendarData && (
+        {(!googleCalendarData || googleCalendarIsError) && (
           <Alert severity="info">
             You don't have connected Google Calendar!
           </Alert>
