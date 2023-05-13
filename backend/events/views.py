@@ -86,7 +86,6 @@ class SocialCalendar(APIView, OAuthLoginMixin, OAuth2View):
     def post(self, request):
         code = request.data['code']
         token_url = "https://oauth2.googleapis.com/token"
-
         social_app = SocialApp.objects.get(provider='google')
         client_id = social_app.client_id
         client_secret = social_app.secret

@@ -64,7 +64,8 @@ INSTALLED_APPS = [
 
     "accounts",
     "authentication",
-    "events"
+    "events",
+    "integrations"
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
