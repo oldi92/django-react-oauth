@@ -17,6 +17,7 @@ import { AxiosError } from "axios";
 
 interface AuthenticationReturnType {
   isAuthenticated: boolean;
+  isAuthenticatedVerify: boolean;
   isLoginLoading: boolean;
   loginError: AxiosError<any>;
   login: (credentials: Credentials) => void;
@@ -65,6 +66,7 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
   } = useLogoutMutation();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticatedVerify, setIsAuthenticatedVerify] = useState(false);
   const [user, setUser] = useState<User>({
     pk: 0,
     email: "",
@@ -83,10 +85,12 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
   useEffect(() => {
     if (isLoginSuccess || isTokenVerifySuccess || isGoogleLoginSuccess) {
       setIsAuthenticated(true);
+      setIsAuthenticatedVerify(true);
     }
 
     if (isLogoutSuccess) {
       setIsAuthenticated(false);
+      setIsAuthenticatedVerify(true);
     }
   }, [
     isLoginSuccess,
@@ -142,6 +146,7 @@ const useAuthenticationProvider = (): AuthenticationReturnType => {
 
   return {
     isAuthenticated,
+    isAuthenticatedVerify,
     isLoginLoading,
     loginError,
     login,

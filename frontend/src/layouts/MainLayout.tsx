@@ -21,13 +21,15 @@ interface Props {
 }
 
 export const MainLayout = ({ children }: Props) => {
-  const { isAuthenticated, isTokenVerifySuccess, isTokenVerifyLoading } =
+  const { isAuthenticated, isAuthenticatedVerify, isTokenVerifyLoading } =
     useAuthentication();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isTokenVerifySuccess && !isAuthenticated) navigate("/");
-  }, [navigate, isAuthenticated, isTokenVerifySuccess]);
+    if (isAuthenticatedVerify && !isAuthenticated) {
+      navigate("/");
+    }
+  }, [navigate, isAuthenticated, isAuthenticatedVerify]);
 
   return (
     <Container>

@@ -52,15 +52,12 @@ export const Events = () => {
     // eslint-disable-next-line
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    if (code) {
-      axios
-        .post("http://localhost:8000/events/social-calendar/", { code })
-        .then((res) => console.log("RES ", res))
-        .catch((err) => console.log(err));
-    }
-    // eslint-disable-next-line
-  }, [code]);
+  const createCalendar = (code: string) => {
+    axios
+      .post("http://localhost:8000/events/social-calendar/", { code })
+      .then((res) => console.log("RES ", res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <MainLayout>
@@ -123,8 +120,9 @@ export const Events = () => {
                   {/* <GoogleLogin variant="calendar" /> */}
                   <GoogleLogin
                     variant="calendar"
+                    redirectUri="http://localhost:3000/dashboard"
                     onOauthSuccess={(code) => {
-                      console.log("CODE ", code);
+                      createCalendar(code);
                     }}
                   />
 
