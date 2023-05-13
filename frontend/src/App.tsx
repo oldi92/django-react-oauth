@@ -1,40 +1,37 @@
-import { useEffect, useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { Events, Login } from "./components";
+import styled from "@emotion/styled";
+import { useAuthentication } from "./hooks";
+import { CircularProgress, Stack } from "@mui/material";
 
-import Users from "./Users";
-import Login from "./Login";
+const Container = styled.div`
+  height: 100vh;
+  background: ${({ theme }: any) => theme.palette.background.default};
+  color: ${({ theme }: any) => theme.palette.text.primary};
+  display: flex;
+  justify-content: center;
+`;
 
-function App() {
-  const [isAuthenticatedLoading, setIsAuthenticatedLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    setIsAuthenticatedLoading(true);
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setIsAuthenticatedLoading(false);
-  }, []);
+const App = () => {
+  const {
+    isAuthenticated,
+    isTokenVerifyLoading,
+    isTokenVerifySuccess,
+    isGoogleLoginLoading,
+  } = useAuthentication();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        {isAuthenticatedLoading && <CircularProgress />}
+    <Container>
+      {(isTokenVerifyLoading || isGoogleLoginLoading) && (
+        <Stack justifyContent="center">
+          <CircularProgress />
+        </Stack>
+      )}
 
-        {isAuthenticated ? (
-          <Users />
-        ) : (
-          <Login
-            onLoginSuccess={() => {
-              setIsAuthenticated(true);
-            }}
-          />
-        )}
-      </header>
-    </div>
+      {isAuthenticated && isTokenVerifySuccess && <Events />}
+
+      {!isAuthenticated && <Login />}
+    </Container>
   );
-}
+};
 
 export default App;
