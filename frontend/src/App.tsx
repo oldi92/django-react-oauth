@@ -1,7 +1,5 @@
-import { Events, Login } from "./components";
 import styled from "@emotion/styled";
-import { useAuthentication } from "./hooks";
-import { CircularProgress, Stack } from "@mui/material";
+import Routes from "./Routes";
 
 const Container = styled.div`
   height: 100vh;
@@ -12,24 +10,9 @@ const Container = styled.div`
 `;
 
 const App = () => {
-  const {
-    isAuthenticated,
-    isTokenVerifyLoading,
-    isTokenVerifySuccess,
-    isGoogleLoginLoading,
-  } = useAuthentication();
-
   return (
     <Container>
-      {(isTokenVerifyLoading || isGoogleLoginLoading) && (
-        <Stack justifyContent="center">
-          <CircularProgress />
-        </Stack>
-      )}
-
-      {isAuthenticated && isTokenVerifySuccess && <Events />}
-
-      {!isAuthenticated && <Login />}
+      <Routes />
     </Container>
   );
 };

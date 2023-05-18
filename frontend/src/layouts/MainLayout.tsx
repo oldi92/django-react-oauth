@@ -1,7 +1,10 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 import { TopNavigation } from "../components";
 import styled from "@emotion/styled";
+import { useAuthentication } from "../hooks";
+import { useNavigate } from "react-router-dom";
+import { CircularProgress, Stack } from "@mui/material";
 
 const Container = styled.div`
   flex: 1;
@@ -18,11 +21,29 @@ interface Props {
 }
 
 export const MainLayout = ({ children }: Props) => {
+  const { isAuthenticated, isAuthenticatedVerify, isTokenVerifyLoading } =
+    useAuthentication();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticatedVerify && !isAuthenticated) {
+      navigate("/");
+    }
+  }, [navigate, isAuthenticated, isAuthenticatedVerify]);
+
   return (
     <Container>
       <TopNavigation />
 
-      <Main>{children}</Main>
+      <Main>
+        {isTokenVerifyLoading ? (
+          <Stack alignItems="center">
+            <CircularProgress />
+          </Stack>
+        ) : (
+          children
+        )}
+      </Main>
     </Container>
   );
 };

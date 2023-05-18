@@ -10,26 +10,24 @@ import {
 import { Button } from "@mui/material";
 import { ReactComponent as GoogleIcon } from "../../assets/google-icon.svg";
 import { useAuthentication } from "../../hooks";
+import { useSearchParams } from "react-router-dom";
 
 interface Props {
   variant?: "login" | "calendar";
   redirectUri?: string;
+  loading?: boolean;
   onOauthSuccess?: (code: string) => void;
 }
 
 export const GoogleLogin = ({
   variant = "login",
+  loading,
   redirectUri = GOOGLE_REDIRECT_URI,
   onOauthSuccess,
 }: Props) => {
   const { googleLogin } = useAuthentication();
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-
-  const scopes =
-    variant === "login"
-      ? GOOGLE_PROFILE_SCOPE + GOOGLE_CALENDAR_SCOPE
-      : GOOGLE_CALENDAR_SCOPE;
+  let [searchParams, setSearchParams] = useSearchParams();
+  const code = searchParams.get("code");
 
   const handleGoogleOauth = () => {
     // Check out google oauth2 docs for more in depth
@@ -67,16 +65,27 @@ export const GoogleLogin = ({
         googleLogin({ code });
       }
     }
+    setSearchParams();
     // eslint-disable-next-line
   }, [code]);
 
   return variant === "login" ? (
-    <Button size="large" onClick={handleGoogleOauth} startIcon={<GoogleIcon />}>
-      Continue with Google
+    <Button
+      size="large"
+      disabled={loading}
+      onClick={handleGoogleOauth}
+      startIcon={<GoogleIcon />}
+    >
+      {loading ? "Logging..." : "Continue with Google"}
     </Button>
   ) : (
-    <Button fullWidth variant="contained" onClick={handleGoogleOauth}>
-      Connect
+    <Button
+      fullWidth
+      disabled={loading}
+      variant="contained"
+      onClick={handleGoogleOauth}
+    >
+      {loading ? "Connecting..." : "Connect"}
     </Button>
   );
 };

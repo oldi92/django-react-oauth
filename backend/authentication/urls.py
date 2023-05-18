@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import GoogleLogin, GoogleConnect
+from .views import GoogleLogin
 from dj_rest_auth.registration.views import (
     SocialAccountListView, SocialAccountDisconnectView
 )
@@ -11,6 +11,4 @@ urlpatterns = [
     path('socialaccounts/<int:pk>/disconnect/',
          SocialAccountDisconnectView.as_view()),
     path('google-login/', GoogleLogin.as_view(), name='google_login'),
-    path('google-connect/', GoogleConnect.as_view(), name='google_connect'),
-
 ]

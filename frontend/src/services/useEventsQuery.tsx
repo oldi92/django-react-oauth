@@ -15,6 +15,8 @@ export const useEventsQuery = (): UseQueryResult<
   return useQuery({
     queryKey: ["events"],
     queryFn: getEvents,
+    retry: false,
     refetchOnWindowFocus: false,
+    enabled: false,
   });
 };
